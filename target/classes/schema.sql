@@ -220,13 +220,13 @@ DROP TRIGGER IF EXISTS trg_resume_ins_nb;
 DROP TRIGGER IF EXISTS trg_resume_del_nb;
 
 CREATE TRIGGER trg_resume_ins_nb
-AFTER INSERT ON resume
-FOR EACH ROW
+    AFTER INSERT ON resume
+    FOR EACH ROW
     UPDATE cours SET nb_resumes = nb_resumes + 1 WHERE code = NEW.code_cours;
 
 CREATE TRIGGER trg_resume_del_nb
-AFTER DELETE ON resume
-FOR EACH ROW
+    AFTER DELETE ON resume
+    FOR EACH ROW
     UPDATE cours SET nb_resumes = nb_resumes - 1 WHERE code = OLD.code_cours;
 
 -- --------------------------------------------------------
@@ -236,13 +236,13 @@ DROP TRIGGER IF EXISTS trg_possession_ins_nb;
 DROP TRIGGER IF EXISTS trg_possession_del_nb;
 
 CREATE TRIGGER trg_possession_ins_nb
-AFTER INSERT ON possession
-FOR EACH ROW
+    AFTER INSERT ON possession
+    FOR EACH ROW
     UPDATE objet SET nb_achats = nb_achats + 1 WHERE oid = NEW.oid;
 
 CREATE TRIGGER trg_possession_del_nb
-AFTER DELETE ON possession
-FOR EACH ROW
+    AFTER DELETE ON possession
+    FOR EACH ROW
     UPDATE objet SET nb_achats = nb_achats - 1 WHERE oid = OLD.oid;
 
 -- --------------------------------------------------------
@@ -255,15 +255,15 @@ DROP TRIGGER IF EXISTS trg_trans_upd_depense;
 -- Sans BEGIN/END : le IF est remplacé par un WHERE conditionnel,
 -- ce qui évite le problème de parsing du ; par Spring ScriptUtils.
 CREATE TRIGGER trg_trans_ins_depense
-AFTER INSERT ON transaction_
-FOR EACH ROW
+    AFTER INSERT ON transaction_
+    FOR EACH ROW
     UPDATE utilisateur
     SET total_depense = total_depense + ABS(NEW.montant)
     WHERE uid = NEW.utilisateur_uid AND NEW.montant < 0;
 
 CREATE TRIGGER trg_trans_del_depense
-AFTER DELETE ON transaction_
-FOR EACH ROW
+    AFTER DELETE ON transaction_
+    FOR EACH ROW
     UPDATE utilisateur
     SET total_depense = total_depense - ABS(OLD.montant)
     WHERE uid = OLD.utilisateur_uid AND OLD.montant < 0;
@@ -271,11 +271,11 @@ FOR EACH ROW
 -- Pour UPDATE : on corrige la dépense en recalculant le delta via CASE.
 -- Toujours une seule instruction, compatible Spring ScriptUtils.
 CREATE TRIGGER trg_trans_upd_depense
-AFTER UPDATE ON transaction_
-FOR EACH ROW
+    AFTER UPDATE ON transaction_
+    FOR EACH ROW
     UPDATE utilisateur
     SET total_depense = total_depense
-        - CASE WHEN OLD.montant < 0 THEN ABS(OLD.montant) ELSE 0 END
+                            - CASE WHEN OLD.montant < 0 THEN ABS(OLD.montant) ELSE 0 END
         + CASE WHEN NEW.montant < 0 THEN ABS(NEW.montant) ELSE 0 END
     WHERE uid = NEW.utilisateur_uid;
 
@@ -287,22 +287,22 @@ DROP TRIGGER IF EXISTS trg_eval_del_note;
 DROP TRIGGER IF EXISTS trg_eval_upd_note;
 
 CREATE TRIGGER trg_eval_ins_note
-AFTER INSERT ON evaluation
-FOR EACH ROW
+    AFTER INSERT ON evaluation
+    FOR EACH ROW
     UPDATE resume
     SET note_moyenne = (SELECT AVG(note) FROM evaluation WHERE rid = NEW.rid)
     WHERE rid = NEW.rid;
 
 CREATE TRIGGER trg_eval_del_note
-AFTER DELETE ON evaluation
-FOR EACH ROW
+    AFTER DELETE ON evaluation
+    FOR EACH ROW
     UPDATE resume
     SET note_moyenne = (SELECT AVG(note) FROM evaluation WHERE rid = OLD.rid)
     WHERE rid = OLD.rid;
 
 CREATE TRIGGER trg_eval_upd_note
-AFTER UPDATE ON evaluation
-FOR EACH ROW
+    AFTER UPDATE ON evaluation
+    FOR EACH ROW
     UPDATE resume
     SET note_moyenne = (SELECT AVG(note) FROM evaluation WHERE rid = NEW.rid)
     WHERE rid = NEW.rid;

@@ -7,11 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ObjetRepository extends JpaRepository<Objet, Integer> {
 
     List<Objet> findByType(TypeObjet type);
+
+    /** Recherche d'un objet par son nom (utilise par l'import des achats). */
+    Optional<Objet> findByNom(String nom);
 
     /** Q6 : L'objet cosmetique le plus achete — utilise l'attribut dérivé nb_achats */
     @Query(value = """
