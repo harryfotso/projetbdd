@@ -14,8 +14,15 @@ import java.util.List;
 public class DTOs {
 
     // ========== AUTH ==========
-    @Data @NoArgsConstructor @AllArgsConstructor
-    public static class LoginRequest {
+    @Data @NoArgsConstructor @AllArgsConstructor/** @Data evite d'ecrire pour spring les guetter
+    et les setter ainsi que d'autres methodes */
+
+    /**  @NoArgsConstructor important pour l'orseque l'on apelle le constructeur avec un @RequestBody
+     * celui ci crée un objet vide qu'il vas completer petit a petit */
+
+    /**C'est utile quand tu connais déjà toutes les valeurs au moment de créer l'objet
+     */
+     public static class LoginRequest {
         private String nom;
         private String motDePasse;
     }
@@ -27,7 +34,9 @@ public class DTOs {
         private String motDePasse;
     }
 
-    // ========== UTILISATEUR ==========
+    /**
+     * DTO pour le transfert de données des utilisateurs.
+     */
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static class UtilisateurDTO {
         private Integer uid;
@@ -51,7 +60,6 @@ public class DTOs {
                     .email(u.getEmail())
                     .dateInscription(u.getDateInscription())
                     .points(u.getPoints())
-                    // niveau, badgeActif, titreActif sont remplis par le service
                     .build();
         }
     }
@@ -60,11 +68,13 @@ public class DTOs {
     public static class UtilisateurUpdateRequest {
         private String nom;
         private String email;
-        private Integer badgeActif;  // OID ou null
-        private Integer titreActif;  // OID ou null
+        private Integer badgeActif;
+        private Integer titreActif;
     }
 
-    // ========== COURS ==========
+    /**
+     * DTO pour le transfert de données des cours.
+     */
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static class CoursDTO {
         private String code;
@@ -83,7 +93,9 @@ public class DTOs {
         }
     }
 
-    // ========== RESUME ==========
+    /**
+     * DTO pour le transfert de données des résumés.
+     */
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static class ResumeDTO {
         private Integer rid;
@@ -153,7 +165,9 @@ public class DTOs {
         private String commentaire;
     }
 
-    // ========== OBJET ==========
+    /**
+     * DTO pour le transfert de données des objets.
+     */
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static class ObjetDTO {
         private Integer oid;
@@ -170,7 +184,9 @@ public class DTOs {
         }
     }
 
-    // ========== POSSESSION ==========
+    /**
+     * DTO pour le transfert de données des possessions.
+     */
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static class PossessionDTO {
         private Integer uid;
@@ -197,7 +213,9 @@ public class DTOs {
         private Integer oid;
     }
 
-    // ========== TRANSACTION ==========
+    /**
+     * DTO pour le transfert de données des transactions.
+     */
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static class TransactionDTO {
         private Integer tid;

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /Users/harry/Desktop/projetbdd/src/main/java/com/cwa/projetbdd/ProjetbddApplication.java
 /Users/harry/Desktop/projetbdd/src/main/java/com/cwa/projetbdd/config/WebConfig.java
 /Users/harry/Desktop/projetbdd/src/main/java/com/cwa/projetbdd/controllers/AnalyticsController.java
@@ -44,3 +45,51 @@
 /Users/harry/Desktop/projetbdd/src/main/java/com/cwa/projetbdd/services/PossessionService.java
 /Users/harry/Desktop/projetbdd/src/main/java/com/cwa/projetbdd/services/ResumeService.java
 /Users/harry/Desktop/projetbdd/src/main/java/com/cwa/projetbdd/services/UtilisateurService.java
+=======
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/ProjetbddApplication.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/config/WebConfig.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/controllers/AnalyticsController.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/controllers/CoursController.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/controllers/EvaluationController.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/controllers/LeaderboardController.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/controllers/ObjetController.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/controllers/PossessionController.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/controllers/ResumeController.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/controllers/TransactionController.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/controllers/UtilisateurController.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/dto/DTOs.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/exceptions/BusinessException.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/exceptions/GlobalExceptionHandler.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/exceptions/ResourceNotFoundException.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/Classement.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/Cours.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/Evaluation.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/Objet.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/Possession.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/PossessionId.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/Resume.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/SeuilNiveau.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/Transaction.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/TypeObjet.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/TypePeriode.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/TypeTransaction.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/TypeTransactionConverter.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/Utilisateur.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/UtilisateurClassement.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/models/UtilisateurClassementId.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/repositories/ClassementRepository.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/repositories/CoursRepository.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/repositories/EvaluationRepository.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/repositories/ObjetRepository.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/repositories/PossessionRepository.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/repositories/ResumeRepository.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/repositories/SeuilNiveauRepository.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/repositories/TransactionRepository.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/repositories/UtilisateurClassementRepository.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/repositories/UtilisateurRepository.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/services/AnalyticsService.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/services/EvaluationService.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/services/PossessionService.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/services/ResumeService.java
+/Users/enzominacapelli/Library/Mobile Documents/com~apple~CloudDocs/digital elec/code_en_c/bdd projet/projetbdd/src/main/java/com/cwa/projetbdd/services/UtilisateurService.java
+>>>>>>> Stashed changes

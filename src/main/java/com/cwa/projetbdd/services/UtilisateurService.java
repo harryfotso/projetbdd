@@ -27,13 +27,13 @@ public class UtilisateurService {
      */
     private UtilisateurDTO enrichDTO(Utilisateur u) {
         UtilisateurDTO dto = UtilisateurDTO.from(u);
-        // Niveau calcule dynamiquement
+        /** Niveau calcule dynamiquement */
         Integer niveau = seuilNiveauRepository.findNiveauByPoints(u.getPoints());
         dto.setNiveau(niveau != null ? niveau : 1);
-        // Badge actif
+        /** Badge actif */
         possessionRepository.findActivePossessionByType(u.getUid(), TypeObjet.badge)
                 .ifPresent(p -> dto.setBadgeActif(ObjetDTO.from(p.getObjet())));
-        // Titre actif
+        /** Titre actif */
         possessionRepository.findActivePossessionByType(u.getUid(), TypeObjet.titre)
                 .ifPresent(p -> dto.setTitreActif(ObjetDTO.from(p.getObjet())));
         return dto;
@@ -111,8 +111,8 @@ public class UtilisateurService {
             u.setEmail(req.getEmail());
         }
 
-        // Activation badge via possession.est_actif
-        // Desactiver d'abord tous les badges
+        /** Activation badge via possession.est_actif */
+        /** Desactiver d'abord tous les badges */
         possessionRepository.deactivateAllByType(uid, TypeObjet.badge);
         if (req.getBadgeActif() != null) {
             Objet o = objetRepository.findById(req.getBadgeActif())
@@ -126,7 +126,7 @@ public class UtilisateurService {
             possessionRepository.save(p);
         }
 
-        // Activation titre via possession.est_actif
+        /** Activation titre via possession.est_actif */
         possessionRepository.deactivateAllByType(uid, TypeObjet.titre);
         if (req.getTitreActif() != null) {
             Objet o = objetRepository.findById(req.getTitreActif())

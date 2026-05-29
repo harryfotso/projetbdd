@@ -10,14 +10,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/cours")
-@RequiredArgsConstructor
+@RestController /** annonce deux choses à Spring: « cette classe sert à répondre à des requêtes web » et « tout ce que renvoient ses méthodes doit être transformé en JSON » */
+@RequestMapping("/api/cours") /** définit le préfixe d'adresse commun à toutes les méthodes de ce controller*/
+@RequiredArgsConstructor  /**C'est ce qui permet à Spring de « brancher » le repository dans le controller sans que tu écrives new CoursRepository(). C'est l'injection de dépendances :
+ Spring crée le repository et te le donne tout prêt. Là encore, pas de prévention, juste un raccourci d'écriture.*/
+
 public class CoursController {
 
     private final CoursRepository coursRepository;
 
-    @GetMapping
+    @GetMapping   /** dit : « cette méthode répond aux requêtes HTTP de type GET » celle ci ne se declanchera pas pour un poste ou un delete */
     public List<CoursDTO> findAll(
             @RequestParam(required = false) String faculte,
             @RequestParam(required = false) Integer credits,
@@ -42,7 +44,8 @@ public class CoursController {
     }
 
     @PostMapping
-    public CoursDTO create(@RequestBody CoursDTO dto) {
+    public CoursDTO create(@RequestBody CoursDTO dto) {   /**@RequestBody : Spring lit ce JSON et le convertit automatiquement en un objet CoursDTO Java, en faisant
+    correspondre chaque clé du JSON ("code", "nom"…) au champ du même nom dans la classe */
         if (dto.getCode() == null || dto.getCode().isBlank())
             throw new BusinessException("Code obligatoire");
         if (coursRepository.existsById(dto.getCode()))

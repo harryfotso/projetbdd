@@ -1,7 +1,9 @@
-/* =============================================================================
-   INFOH303 - Plateforme de partage de resumes
-   Style global - Design system inspire des UI modernes (Linear/Notion)
-   ============================================================================= */
+/**
+ * INFOH303 - Plateforme de partage de résumés.
+ * <p>
+ * Style global — Design system inspiré des UI modernes (Linear/Notion).
+ * </p>
+ */
 
 :root {
   --bg: #0d0e10;
@@ -47,9 +49,9 @@ html, body {
 a { color: var(--accent); text-decoration: none; }
 a:hover { color: var(--accent-hover); text-decoration: underline; }
 
-/* ============================================================================
-   NAVBAR
-   ============================================================================ */
+/**
+ * Styles de la barre de navigation principale.
+ */
 .navbar {
   position: sticky;
   top: 0;
@@ -150,9 +152,9 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
 .dropdown a:last-child { border-bottom: none; }
 .dropdown a:hover { background: var(--surface-3); text-decoration: none; }
 
-/* ============================================================================
-   LAYOUT
-   ============================================================================ */
+/**
+ * Styles de mise en page et de structure générale.
+ */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -170,9 +172,9 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
 .breadcrumb a:hover { color: var(--accent); }
 .breadcrumb span { margin: 0 6px; }
 
-/* ============================================================================
-   CARDS & GRIDS
-   ============================================================================ */
+/**
+ * Styles des cartes et des grilles de disposition.
+ */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -214,9 +216,9 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
 .stat-value.success { color: var(--success); }
 .stat-value.warning { color: var(--warning); }
 
-/* ============================================================================
-   TABLES
-   ============================================================================ */
+/**
+ * Styles des tableaux de données.
+ */
 .table-wrapper {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -248,9 +250,9 @@ table tr:last-child td { border-bottom: none; }
 table tr:hover { background: var(--surface-2); }
 table tr.highlighted { background: var(--accent-bg); }
 
-/* ============================================================================
-   BUTTONS
-   ============================================================================ */
+/**
+ * Styles des boutons et de leurs variantes.
+ */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -293,9 +295,9 @@ table tr.highlighted { background: var(--accent-bg); }
 .btn-lg { padding: 12px 24px; font-size: 14px; }
 .btn-block { width: 100%; }
 
-/* ============================================================================
-   FORMS
-   ============================================================================ */
+/**
+ * Styles des formulaires et des champs de saisie.
+ */
 .form-group { margin-bottom: 16px; }
 .form-label {
   display: block;
@@ -326,9 +328,9 @@ table tr.highlighted { background: var(--accent-bg); }
   margin-top: 6px;
 }
 
-/* ============================================================================
-   BADGES
-   ============================================================================ */
+/**
+ * Styles des badges et étiquettes visuelles.
+ */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -347,18 +349,18 @@ table tr.highlighted { background: var(--accent-bg); }
 .badge-purple { background: var(--purple-bg);  color: var(--purple); }
 .badge-gray   { background: var(--surface-3);  color: var(--text-muted); }
 
-/* ============================================================================
-   STARS
-   ============================================================================ */
+/**
+ * Styles des étoiles de notation.
+ */
 .stars { display: inline-flex; gap: 2px; color: var(--warning); font-size: 16px; }
 .stars-input { cursor: pointer; }
 .stars-input span { transition: transform 0.1s; }
 .stars-input span:hover { transform: scale(1.2); }
 .star-empty { color: var(--surface-3); }
 
-/* ============================================================================
-   LOGIN SCREEN
-   ============================================================================ */
+/**
+ * Styles de l'écran de connexion et d'inscription.
+ */
 .auth-container {
   min-height: 100vh;
   display: flex;
@@ -399,9 +401,9 @@ table tr.highlighted { background: var(--accent-bg); }
   color: var(--text-muted);
 }
 
-/* ============================================================================
-   PODIUM (LEADERBOARD)
-   ============================================================================ */
+/**
+ * Styles du podium pour le classement des utilisateurs.
+ */
 .podium {
   display: flex;
   align-items: flex-end;
@@ -422,9 +424,9 @@ table tr.highlighted { background: var(--accent-bg); }
 .podium-3 { border-color: #b45309; }
 .medal { font-size: 32px; margin-bottom: 8px; }
 
-/* ============================================================================
-   MODAL
-   ============================================================================ */
+/**
+ * Styles de la fenêtre modale de confirmation.
+ */
 .modal-overlay {
   position: fixed; inset: 0;
   background: rgba(0, 0, 0, 0.7);
@@ -447,9 +449,9 @@ table tr.highlighted { background: var(--accent-bg); }
 .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
 
-/* ============================================================================
-   TOAST
-   ============================================================================ */
+/**
+ * Styles des notifications toast.
+ */
 .toast-container {
   position: fixed;
   bottom: 24px;
@@ -476,9 +478,9 @@ table tr.highlighted { background: var(--accent-bg); }
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* ============================================================================
-   UTILS
-   ============================================================================ */
+/**
+ * Classes utilitaires et styles divers.
+ */
 .flex { display: flex; }
 .flex-between { display: flex; justify-content: space-between; align-items: center; }
 .gap-2 { gap: 8px; }

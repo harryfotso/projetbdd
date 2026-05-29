@@ -76,7 +76,7 @@ public class ResumeService {
                 .build();
         r = resumeRepository.save(r);
 
-        // Transaction de gain
+        /** Transaction de gain */
         Transaction t = Transaction.builder()
                 .typeTransaction(TypeTransaction.GAIN_PUBLICATION)
                 .dateTransaction(LocalDate.now())

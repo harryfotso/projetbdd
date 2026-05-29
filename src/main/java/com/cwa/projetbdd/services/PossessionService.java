@@ -74,9 +74,9 @@ public class PossessionService {
         if (type != TypeObjet.badge && type != TypeObjet.titre)
             throw new BusinessException("Seuls les badges et titres peuvent etre actives");
 
-        // Desactiver tous les objets du meme type pour cet utilisateur
+        /** Désactive tous les objets du même type pour cet utilisateur */
         possessionRepository.deactivateAllByType(uid, type);
-        // Activer celui-ci
+        /** Active l'objet sélectionné. */
         p.setEstActif(true);
         possessionRepository.save(p);
     }

@@ -37,6 +37,13 @@ public class EvaluationService {
 
     /** Creation d'une evaluation + transaction de gain pour l'auteur du resume */
     @Transactional
+    /**
+    Le point crucial : c'est l'exception qui déclenche l'annulation.
+    Rien a faire pour gérer le rollback.
+    Si, au milieu d'un achat, le service lance une BusinessException("Points insuffisants"),
+     alors @Transactional annule automatiquement tout ce qui avait été fait avant dans la méthode.
+    Si l'achat n'est pas valide, rien ne doit changer en base.*/
+
     public EvaluationDTO create(Integer evaluateurUid, EvaluationRequest req) {
         Utilisateur evaluateur = utilisateurRepository.findById(evaluateurUid)
                 .orElseThrow(() -> new ResourceNotFoundException("Evaluateur introuvable"));
@@ -66,7 +73,9 @@ public class EvaluationService {
                 .build();
         e = evaluationRepository.save(e);
 
-        // Transaction : l'auteur du resume gagne 5 points
+        /**
+         * Transaction : l'auteur du résumé gagne 5 points.
+         */
         Transaction t = Transaction.builder()
                 .typeTransaction(TypeTransaction.GAIN_EVALUATION)
                 .dateTransaction(LocalDate.now())
@@ -79,7 +88,9 @@ public class EvaluationService {
 
         return EvaluationDTO.from(e);
     }
-
+    /**
+     * Active l'objet sélectionné.
+     */
     @Transactional
     public void delete(Integer eid, Integer uid) {
         Evaluation e = evaluationRepository.findById(eid)

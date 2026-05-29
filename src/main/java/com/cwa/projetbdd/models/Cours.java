@@ -44,6 +44,6 @@ public class Cours {
     @NotNull
     @Min(0)
     @Column(name = "nb_resumes", nullable = false)
-    @Builder.Default
+    @Builder.Default/** important pour avoir des valeurs par defaults en argument */
     private Integer nbResumes = 0;
 }

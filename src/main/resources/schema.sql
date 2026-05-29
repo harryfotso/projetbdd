@@ -1,8 +1,10 @@
--- ============================================================
--- INFOH303 - Projet BDD
--- schema.sql — aligné avec les modèles Java (JPA/Hibernate)
--- MySQL 8 / Spring Boot 3.3
--- ============================================================
+/**
+ * INFOH303 - Projet BDD.
+ * <p>
+ * Script DDL de création du schéma relationnel.
+ * Aligné avec les modèles Java (JPA/Hibernate) — MySQL 8 / Spring Boot 3.3.
+ * </p>
+ */
 
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -19,10 +21,13 @@ DROP TABLE IF EXISTS cours;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
--- ============================================================
--- TABLE COURS
--- ============================================================
-
+/**
+ * Table des cours universitaires.
+ * <p>
+ * Identifiée par un code unique. L'attribut dérivé {@code nb_resumes}
+ * est maintenu automatiquement par trigger.
+ * </p>
+ */
 CREATE TABLE cours (
                        code            VARCHAR(20)  NOT NULL,
                        nom             VARCHAR(100) NOT NULL,
@@ -36,10 +41,13 @@ CREATE TABLE cours (
                        CONSTRAINT chk_cours_nb_res   CHECK (nb_resumes >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- TABLE UTILISATEUR
--- ============================================================
-
+/**
+ * Table des utilisateurs de la plateforme.
+ * <p>
+ * Trois clés candidates : {@code uid}, {@code nom} (UNIQUE), {@code email} (UNIQUE).
+ * L'attribut dérivé {@code total_depense} est maintenu automatiquement par trigger.
+ * </p>
+ */
 CREATE TABLE utilisateur (
                              uid                 INT          NOT NULL AUTO_INCREMENT,
                              nom                 VARCHAR(50)  NOT NULL,
@@ -56,11 +64,13 @@ CREATE TABLE utilisateur (
                              CONSTRAINT chk_utilisateur_depense CHECK (total_depense >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- TABLE SEUIL_NIVEAU
--- points_min est la PK (correspond à @Id sur pointsMin dans SeuilNiveau.java)
--- ============================================================
-
+/**
+ * Table des seuils de niveau.
+ * <p>
+ * Définit les paliers de points nécessaires pour chaque niveau.
+ * La clé primaire est {@code points_min}.
+ * </p>
+ */
 CREATE TABLE seuil_niveau (
                               points_min  INT NOT NULL,
                               niveau      INT NOT NULL,
@@ -71,11 +81,13 @@ CREATE TABLE seuil_niveau (
                               CONSTRAINT chk_seuil_niveau  CHECK (niveau >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- TABLE OBJET
--- type ENUM aligné sur TypeObjet.java : badge | titre | theme | cosmetique
--- ============================================================
-
+/**
+ * Table des objets cosmétiques disponibles à l'achat.
+ * <p>
+ * Types possibles : badge, titre, theme, cosmetique.
+ * L'attribut dérivé {@code nb_achats} est maintenu automatiquement par trigger.
+ * </p>
+ */
 CREATE TABLE objet (
                        oid         INT          NOT NULL AUTO_INCREMENT,
                        nom         VARCHAR(100) NOT NULL,
@@ -90,12 +102,13 @@ CREATE TABLE objet (
                        CONSTRAINT chk_objet_nb_achats CHECK (nb_achats >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- TABLE RESUME
--- visibilite ENUM alignée sur le @Pattern du modèle Java
--- uid -> utilisateur (auteur), code_cours -> cours
--- ============================================================
-
+/**
+ * Table des résumés publiés par les utilisateurs.
+ * <p>
+ * Chaque résumé est associé à un auteur ({@code uid}) et un cours ({@code code_cours}).
+ * L'attribut dérivé {@code note_moyenne} est maintenu automatiquement par trigger.
+ * </p>
+ */
 CREATE TABLE resume (
                         rid              INT          NOT NULL AUTO_INCREMENT,
                         titre            VARCHAR(200) NOT NULL,
@@ -114,12 +127,13 @@ CREATE TABLE resume (
                         CONSTRAINT chk_resume_note    CHECK (note_moyenne IS NULL OR (note_moyenne >= 0.0 AND note_moyenne <= 5.0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- TABLE EVALUATION
--- note DECIMAL(2,1) alignée sur BigDecimal dans Evaluation.java
--- UNIQUE(uid, rid) : un utilisateur ne peut évaluer qu'une fois chaque résumé
--- ============================================================
-
+/**
+ * Table des évaluations (notes et commentaires) des résumés.
+ * <p>
+ * Un utilisateur ne peut évaluer qu'une seule fois chaque résumé
+ * (contrainte UNIQUE sur {@code uid, rid}).
+ * </p>
+ */
 CREATE TABLE evaluation (
                             eid         INT            NOT NULL AUTO_INCREMENT,
                             note        DECIMAL(2,1)   NOT NULL,
@@ -135,12 +149,13 @@ CREATE TABLE evaluation (
                             CONSTRAINT chk_eval_note       CHECK (note >= 0.0 AND note <= 5.0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- TABLE POSSESSION
--- PK composite (uid, oid) — correspond à @IdClass(PossessionId.class)
--- est_actif correspond au champ estActif dans Possession.java
--- ============================================================
-
+/**
+ * Table des possessions (objets achetés par les utilisateurs).
+ * <p>
+ * Clé primaire composite ({@code uid, oid}).
+ * Le champ {@code est_actif} indique si l'objet est actuellement équipé.
+ * </p>
+ */
 CREATE TABLE possession (
                             uid         INT     NOT NULL,
                             oid         INT     NOT NULL,
@@ -152,12 +167,12 @@ CREATE TABLE possession (
                             CONSTRAINT fk_possession_objet  FOREIGN KEY (oid) REFERENCES objet(oid)       ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- TABLE CLASSEMENT
--- type_periode ENUM aligné sur TypePeriode.java : mensuel | annuel
--- UNIQUE(periode, type_periode)
--- ============================================================
-
+/**
+ * Table des classements périodiques (mensuels ou annuels).
+ * <p>
+ * Contrainte UNIQUE sur ({@code periode, type_periode}).
+ * </p>
+ */
 CREATE TABLE classement (
                             cid         INT         NOT NULL AUTO_INCREMENT,
                             periode     VARCHAR(20) NOT NULL,
@@ -167,11 +182,13 @@ CREATE TABLE classement (
                             CONSTRAINT uq_classement    UNIQUE (periode, type_periode)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- TABLE UTILISATEUR_CLASSEMENT
--- PK composite (uid, cid) — correspond à @IdClass(UtilisateurClassementId.class)
--- ============================================================
-
+/**
+ * Table d'association entre utilisateurs et classements.
+ * <p>
+ * Clé primaire composite ({@code uid, cid}).
+ * Stocke la position et les points de l'utilisateur au moment du classement.
+ * </p>
+ */
 CREATE TABLE utilisateur_classement (
                                         uid             INT NOT NULL,
                                         cid             INT NOT NULL,
@@ -185,13 +202,14 @@ CREATE TABLE utilisateur_classement (
                                         CONSTRAINT chk_uc_points              CHECK (points_au_moment >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- TABLE TRANSACTION_
--- type_transaction VARCHAR aligné sur TypeTransactionConverter.java
---   valeurs : 'Gain Publication' | 'Gain Évaluation' | 'Dépense'
--- FK composite (utilisateur_uid, oid) -> possession(uid, oid) pour les Dépenses
--- ============================================================
-
+/**
+ * Table des transactions de points.
+ * <p>
+ * Types possibles : 'Gain Publication', 'Gain Évaluation', 'Dépense'.
+ * Exactement une des références ({@code rid}, {@code eid}, {@code oid}) est NOT NULL par transaction.
+ * La FK composite ({@code utilisateur_uid, oid}) référence possession pour les dépenses.
+ * </p>
+ */
 CREATE TABLE transaction_ (
                               tid               INT         NOT NULL AUTO_INCREMENT,
                               type_transaction  VARCHAR(20) NOT NULL,
@@ -209,13 +227,21 @@ CREATE TABLE transaction_ (
                               CONSTRAINT fk_trans_objet       FOREIGN KEY (oid)             REFERENCES objet(oid)       ON DELETE RESTRICT,
                               CONSTRAINT chk_trans_montant    CHECK (montant <> 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
--- ============================================================
--- TRIGGERS — Maintien des attributs dérivés
--- ============================================================
 
--- --------------------------------------------------------
--- Trigger : Cours.nb_resumes
--- --------------------------------------------------------
+/**
+ * Triggers pour le maintien automatique des attributs dérivés.
+ * <p>
+ * Chaque attribut dérivé est recalculé via des triggers AFTER INSERT/UPDATE/DELETE
+ * sur la table source correspondante, garantissant la cohérence des données.
+ * </p>
+ */
+
+/**
+ * Triggers : maintien de {@code Cours.nb_resumes}.
+ * <p>
+ * Incrémente/décrémente le compteur lors de l'insertion/suppression d'un résumé.
+ * </p>
+ */
 DROP TRIGGER IF EXISTS trg_resume_ins_nb;
 DROP TRIGGER IF EXISTS trg_resume_del_nb;
 
@@ -229,9 +255,12 @@ CREATE TRIGGER trg_resume_del_nb
     FOR EACH ROW
     UPDATE cours SET nb_resumes = nb_resumes - 1 WHERE code = OLD.code_cours;
 
--- --------------------------------------------------------
--- Trigger : Objet.nb_achats
--- --------------------------------------------------------
+/**
+ * Triggers : maintien de {@code Objet.nb_achats}.
+ * <p>
+ * Incrémente/décrémente le compteur lors de l'insertion/suppression d'une possession.
+ * </p>
+ */
 DROP TRIGGER IF EXISTS trg_possession_ins_nb;
 DROP TRIGGER IF EXISTS trg_possession_del_nb;
 
@@ -245,15 +274,18 @@ CREATE TRIGGER trg_possession_del_nb
     FOR EACH ROW
     UPDATE objet SET nb_achats = nb_achats - 1 WHERE oid = OLD.oid;
 
--- --------------------------------------------------------
--- Trigger : Utilisateur.total_depense
--- --------------------------------------------------------
+/**
+ * Triggers : maintien de {@code Utilisateur.total_depense}.
+ * <p>
+ * Met à jour le total des dépenses lors de l'insertion, suppression ou modification
+ * d'une transaction à montant négatif. Utilise une seule instruction UPDATE sans BEGIN/END
+ * pour rester compatible avec Spring ScriptUtils.
+ * </p>
+ */
 DROP TRIGGER IF EXISTS trg_trans_ins_depense;
 DROP TRIGGER IF EXISTS trg_trans_del_depense;
 DROP TRIGGER IF EXISTS trg_trans_upd_depense;
 
--- Sans BEGIN/END : le IF est remplacé par un WHERE conditionnel,
--- ce qui évite le problème de parsing du ; par Spring ScriptUtils.
 CREATE TRIGGER trg_trans_ins_depense
     AFTER INSERT ON transaction_
     FOR EACH ROW
@@ -268,8 +300,6 @@ CREATE TRIGGER trg_trans_del_depense
     SET total_depense = total_depense - ABS(OLD.montant)
     WHERE uid = OLD.utilisateur_uid AND OLD.montant < 0;
 
--- Pour UPDATE : on corrige la dépense en recalculant le delta via CASE.
--- Toujours une seule instruction, compatible Spring ScriptUtils.
 CREATE TRIGGER trg_trans_upd_depense
     AFTER UPDATE ON transaction_
     FOR EACH ROW
@@ -279,9 +309,13 @@ CREATE TRIGGER trg_trans_upd_depense
         + CASE WHEN NEW.montant < 0 THEN ABS(NEW.montant) ELSE 0 END
     WHERE uid = NEW.utilisateur_uid;
 
--- --------------------------------------------------------
--- Trigger : Resume.note_moyenne
--- --------------------------------------------------------
+/**
+ * Triggers : maintien de {@code Resume.note_moyenne}.
+ * <p>
+ * Recalcule la moyenne des notes d'un résumé lors de l'insertion,
+ * suppression ou modification d'une évaluation.
+ * </p>
+ */
 DROP TRIGGER IF EXISTS trg_eval_ins_note;
 DROP TRIGGER IF EXISTS trg_eval_del_note;
 DROP TRIGGER IF EXISTS trg_eval_upd_note;

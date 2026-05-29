@@ -1,10 +1,20 @@
-// =============================================================================
-// INFOH303 - Client API et helpers communs
-// =============================================================================
+/**
+ * INFOH303 - Client API et helpers communs.
+ * <p>
+ * Fournit le client HTTP, la gestion de session, les composants UI réutilisables
+ * (toast, modale, navbar) et les fonctions utilitaires DOM pour l'application ResumeHub.
+ * </p>
+ */
 
 const API_BASE = '/api';
 
-// ===== Session (stockee dans localStorage) =====
+/**
+ * Gestionnaire de session utilisateur stockée dans le localStorage.
+ * <p>
+ * Fournit les méthodes pour lire, écrire et supprimer la session,
+ * ainsi qu'un raccourci pour récupérer l'identifiant utilisateur courant.
+ * </p>
+ */
 const Session = {
   get() {
     try { return JSON.parse(localStorage.getItem('user') || 'null'); }
@@ -22,7 +32,19 @@ const Session = {
   }
 };
 
-// ===== Client HTTP =====
+/**
+ * Effectue un appel HTTP vers l'API REST backend.
+ * <p>
+ * Ajoute automatiquement l'identifiant utilisateur dans le header {@code X-User-Id}
+ * si une session est active. Parse la réponse JSON et lève une erreur en cas de statut HTTP non-OK.
+ * </p>
+ *
+ * @param {string}  method       - Méthode HTTP (GET, POST, PUT, DELETE).
+ * @param {string}  path         - Chemin relatif de l'endpoint (ex: {@code /utilisateurs/1}).
+ * @param {Object}  body         - Corps de la requête (optionnel).
+ * @param {Object}  extraHeaders - Headers supplémentaires (optionnel).
+ * @returns {Promise<Object>} La réponse JSON parsée.
+ */
 async function apiCall(method, path, body = null, extraHeaders = {}) {
   const headers = { 'Content-Type': 'application/json', ...extraHeaders };
   const uid = Session.uid();
@@ -43,6 +65,9 @@ async function apiCall(method, path, body = null, extraHeaders = {}) {
   return data;
 }
 
+/**
+ * Raccourcis pour les appels API par méthode HTTP.
+ */
 const Api = {
   get:  (p)        => apiCall('GET', p),
   post: (p, body)  => apiCall('POST', p, body),
@@ -50,7 +75,12 @@ const Api = {
   del:  (p)        => apiCall('DELETE', p),
 };
 
-// ===== Toast =====
+/**
+ * Affiche une notification toast temporaire.
+ *
+ * @param {string} message - Le message à afficher.
+ * @param {string} type    - Le type de notification ({@code 'info'}, {@code 'success'}, {@code 'error'}).
+ */
 function toast(message, type = 'info') {
   let container = document.querySelector('.toast-container');
   if (!container) {
@@ -68,7 +98,16 @@ function toast(message, type = 'info') {
   }, 3500);
 }
 
-// ===== Modal =====
+/**
+ * Ouvre une fenêtre modale de confirmation avec actions personnalisables.
+ *
+ * @param {Object}   options              - Configuration de la modale.
+ * @param {string}   options.title        - Titre de la modale.
+ * @param {string}   options.body         - Contenu HTML ou texte du corps.
+ * @param {Function} options.onConfirm    - Callback exécuté lors de la confirmation.
+ * @param {string}   options.confirmLabel - Libellé du bouton de confirmation.
+ * @param {string}   options.confirmClass - Classe CSS du bouton de confirmation.
+ */
 function modal({ title, body, onConfirm, confirmLabel = 'Confirmer', confirmClass = 'btn-primary' }) {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay open';
@@ -94,15 +133,35 @@ function modal({ title, body, onConfirm, confirmLabel = 'Confirmer', confirmClas
   overlay.onclick = (e) => { if (e.target === overlay) close(); };
 }
 
-// ===== Helpers DOM =====
+/**
+ * Fonctions utilitaires pour la manipulation du DOM et l'échappement HTML.
+ */
+
+/**
+ * Échappe les caractères spéciaux HTML pour prévenir les injections XSS.
+ *
+ * @param {string} s - La chaîne à échapper.
+ * @returns {string} La chaîne échappée.
+ */
 function escape(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({
     '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
   }[c]));
 }
+
+/** Raccourci pour {@code document.querySelector}. */
 function $(sel, ctx = document) { return ctx.querySelector(sel); }
+
+/** Raccourci pour {@code document.querySelectorAll} retournant un tableau. */
 function $$(sel, ctx = document) { return [...ctx.querySelectorAll(sel)]; }
 
+/**
+ * Génère le rendu HTML des étoiles de notation.
+ *
+ * @param {number|null} note - La note à afficher (entre 0 et 5), ou {@code null} si aucune note.
+ * @param {number}      max  - Le nombre maximum d'étoiles.
+ * @returns {string} Chaîne HTML des étoiles.
+ */
 function stars(note, max = 5) {
   if (note == null) return '<span class="text-muted">Aucune note</span>';
   const n = parseFloat(note);
@@ -114,16 +173,34 @@ function stars(note, max = 5) {
   return html;
 }
 
+/**
+ * Formate une date au format localisé français-belge (ex: 07 mai 2026).
+ *
+ * @param {string} d - La date au format ISO.
+ * @returns {string} La date formatée.
+ */
 function formatDate(d) {
   if (!d) return '';
   const dt = new Date(d);
   return dt.toLocaleDateString('fr-BE', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
+/**
+ * Extrait les initiales d'un nom d'utilisateur (max 2 caractères).
+ *
+ * @param {string} nom - Le nom de l'utilisateur.
+ * @returns {string} Les initiales en majuscules.
+ */
 function initials(nom) {
   return (nom || '?').split(/[_\s]/).map(s => s[0]).join('').slice(0, 2).toUpperCase();
 }
 
+/**
+ * Génère un badge coloré en fonction de la faculté.
+ *
+ * @param {string} faculte - Le nom de la faculté.
+ * @returns {string} Chaîne HTML du badge.
+ */
 function facultyBadge(faculte) {
   const colors = {
     'Informatique': 'badge-blue',
@@ -139,6 +216,12 @@ function facultyBadge(faculte) {
   return `<span class="badge ${cls}">${escape(faculte)}</span>`;
 }
 
+/**
+ * Génère un badge coloré en fonction du type d'objet cosmétique.
+ *
+ * @param {string} type - Le type d'objet ({@code 'badge'}, {@code 'titre'}, {@code 'theme'}, {@code 'cosmetique'}).
+ * @returns {string} Chaîne HTML du badge.
+ */
 function typeObjetBadge(type) {
   const map = {
     badge: ['badge-blue', 'Badge'],
@@ -150,7 +233,15 @@ function typeObjetBadge(type) {
   return `<span class="badge ${cls}">${label}</span>`;
 }
 
-// ===== Navbar =====
+/**
+ * Génère le HTML de la barre de navigation principale.
+ * <p>
+ * Affiche le logo, les liens de navigation, les points de l'utilisateur
+ * et un menu déroulant avec les actions du profil.
+ * </p>
+ *
+ * @returns {string} Chaîne HTML de la navbar, ou chaîne vide si aucun utilisateur connecté.
+ */
 function renderNavbar() {
   const user = Session.get();
   if (!user) return '';
@@ -182,18 +273,21 @@ function renderNavbar() {
   `;
 }
 
+/** Bascule l'affichage du menu déroulant utilisateur. */
 function toggleDropdown(e) {
   e.stopPropagation();
   $('#user-dropdown')?.classList.toggle('open');
 }
 document.addEventListener('click', () => $('#user-dropdown')?.classList.remove('open'));
 
+/** Déconnecte l'utilisateur et redirige vers la page de connexion. */
 function logout(e) {
   e.preventDefault();
   Session.clear();
   window.location.hash = '#/login';
 }
 
+/** Met en surbrillance le lien de navigation correspondant à la route active. */
 function highlightActiveLink() {
   const path = window.location.hash.replace('#', '').split('/').slice(0, 2).join('/');
   $$('.navbar-links a').forEach(a => {

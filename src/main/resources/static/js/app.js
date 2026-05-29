@@ -1,6 +1,10 @@
-// =============================================================================
-// INFOH303 - Application SPA - Router et controllers de pages
-// =============================================================================
+/**
+ * INFOH303 - Application SPA - Router et controllers de pages.
+ * <p>
+ * Single Page Application gérant le routage côté client, le rendu des pages
+ * et l'interaction avec l'API REST backend pour la plateforme ResumeHub.
+ * </p>
+ */
 
 const app = {
   routes: {},
@@ -29,9 +33,13 @@ const app = {
 window.addEventListener('hashchange', () => app.navigate());
 window.addEventListener('DOMContentLoaded', () => app.navigate());
 
-// ============================================================================
-// S0 - LOGIN / REGISTER
-// ============================================================================
+/**
+ * Gère l'authentification utilisateur (connexion et inscription).
+ * <p>
+ * Bascule entre les modes connexion et inscription via un lien.
+ * En cas de succès, stocke l'utilisateur en session et redirige vers {@code #/dashboard}.
+ * </p>
+ */
 app.register('/login', async () => {
   document.getElementById('root').innerHTML = `
     <div class="auth-container">
@@ -98,9 +106,13 @@ app.register('/login', async () => {
   };
 });
 
-// ============================================================================
-// S1 - DASHBOARD
-// ============================================================================
+/**
+ * Page principale du tableau de bord après connexion.
+ * <p>
+ * Affiche les statistiques de l'utilisateur connecté (points, niveau, nombre de résumés,
+ * note moyenne), ses résumés les plus récents et un aperçu du top 5 du classement.
+ * </p>
+ */
 app.register('/dashboard', async () => {
   const user = Session.get();
   const [resumes, leaderboard] = await Promise.all([
@@ -184,12 +196,19 @@ app.register('/dashboard', async () => {
   `;
 });
 
-// ============================================================================
-// S2 + S3 - LISTE COURS / DETAIL COURS (fusionnes en un seul handler)
-// ============================================================================
+/**
+ * Handler double usage pour les cours.
+ * <p>
+ * Sans paramètre, affiche le catalogue complet des cours avec filtres
+ * (recherche, faculté, crédits). Avec un code cours en paramètre, affiche
+ * la page de détail du cours incluant tous les résumés associés.
+ * </p>
+ *
+ * @param {string[]} params - Paramètres optionnels ; {@code params[0]} est le code du cours.
+ */
 app.register('/cours', async (params) => {
   if (params.length > 0) {
-    // ---- S3 - DETAIL COURS ----
+    /** Détail d'un cours spécifique. */
     const code = params[0];
     const [cours, resumes] = await Promise.all([
       Api.get(`/cours/${code}`),
@@ -240,7 +259,7 @@ app.register('/cours', async (params) => {
       </div>
     `;
   } else {
-    // ---- S2 - LISTE DES COURS ----
+    /** Liste complète des cours avec filtres. */
     const cours = await Api.get('/cours');
     const allResumes = await Api.get('/resumes');
     const nbParCours = {};
@@ -310,9 +329,17 @@ app.register('/cours', async (params) => {
   }
 });
 
-// ============================================================================
-// S5 - DETAIL RESUME
-// ============================================================================
+/**
+ * Affiche la page de détail d'un résumé.
+ * <p>
+ * Présente le contenu, les métadonnées, la note moyenne et toutes les évaluations.
+ * Si l'utilisateur courant est l'auteur, les boutons modifier et supprimer sont affichés.
+ * Si l'utilisateur n'a pas encore évalué et n'est pas l'auteur, un formulaire
+ * d'évaluation avec étoiles cliquables est rendu.
+ * </p>
+ *
+ * @param {string[]} params - {@code params[0]} est l'identifiant du résumé (rid).
+ */
 app.register('/resume', async (params) => {
   const rid = params[0];
   const user = Session.get();
@@ -399,7 +426,7 @@ app.register('/resume', async (params) => {
     </div>
   `;
 
-  // Etoiles cliquables
+  /** Gestion des étoiles cliquables pour la notation. */
   let noteValue = 0;
   $$('#note-input span').forEach(el => {
     el.onclick = () => {
@@ -418,7 +445,7 @@ app.register('/resume', async (params) => {
         commentaire: $('#comment-input').value || null
       });
       toast('Evaluation envoyee !', 'success');
-      // Refresh user points (the author's points changed, but our points may have changed via reload)
+      /** Rafraîchit la page pour refléter les points mis à jour. */
       app.navigate();
     } catch (e) { toast(e.message, 'error'); }
   };
@@ -438,9 +465,16 @@ app.register('/resume', async (params) => {
   };
 });
 
-// ============================================================================
-// S4 - PUBLIER / EDITER RESUME
-// ============================================================================
+/**
+ * Formulaire de création ou d'édition d'un résumé.
+ * <p>
+ * Si un identifiant de résumé est fourni dans la route, le formulaire est pré-rempli
+ * pour l'édition. Supporte la pré-sélection d'un cours via le paramètre {@code ?cours=}.
+ * Lors d'une création réussie, les points de l'utilisateur sont rafraîchis en session.
+ * </p>
+ *
+ * @param {string[]} params - Optionnel ; {@code params[0]} est l'identifiant du résumé à éditer.
+ */
 app.register('/resume-form', async (params) => {
   const editing = params.length > 0;
   const rid = editing ? params[0] : null;
@@ -508,7 +542,7 @@ app.register('/resume-form', async (params) => {
       } else {
         r = await Api.post('/resumes', body);
         toast('Resume publie ! +10 points', 'success');
-        // Refresh user's points
+        /** Rafraîchit les points de l'utilisateur en session. */
         const u = await Api.get(`/utilisateurs/${Session.uid()}`);
         Session.set(u);
       }
@@ -517,9 +551,16 @@ app.register('/resume-form', async (params) => {
   };
 });
 
-// ============================================================================
-// S6 - PROFIL UTILISATEUR
-// ============================================================================
+/**
+ * Page de profil utilisateur avec contenu à onglets.
+ * <p>
+ * Affiche les informations de l'utilisateur (nom, titre, badge, niveau, date d'inscription),
+ * les statistiques, et trois onglets : résumés publiés, évaluations données,
+ * et objets possédés (visible uniquement par le propriétaire du profil).
+ * </p>
+ *
+ * @param {string[]} params - Optionnel ; {@code params[0]} est l'identifiant utilisateur. Par défaut, l'utilisateur courant.
+ */
 app.register('/profil', async (params) => {
   const uid = params[0] || Session.uid();
   const isOwn = parseInt(uid) === Session.uid();
@@ -617,6 +658,17 @@ app.register('/profil', async (params) => {
   });
 });
 
+/**
+ * Génère le bouton d'activation/désactivation pour un badge ou un titre.
+ * <p>
+ * Si l'objet est actuellement actif pour l'utilisateur, un bouton vert "Actif"
+ * avec une action de désactivation est affiché. Sinon, un bouton neutre "Activer" est rendu.
+ * </p>
+ *
+ * @param {Object} user  - L'utilisateur courant (avec {@code badgeActif} et {@code titreActif}).
+ * @param {Object} objet - L'objet cosmétique pour lequel générer le bouton.
+ * @returns {string} Chaîne HTML du bouton d'activation.
+ */
 function renderActivateBtn(user, objet) {
   const isActive = (objet.type === 'badge' && user.badgeActif?.oid === objet.oid)
                  || (objet.type === 'titre' && user.titreActif?.oid === objet.oid);
@@ -626,6 +678,13 @@ function renderActivateBtn(user, objet) {
   return `<button class="btn btn-secondary btn-sm" onclick="activateObjet(${objet.oid}, '${objet.type}')">Activer</button>`;
 }
 
+/**
+ * Active un objet cosmétique (badge ou titre) pour l'utilisateur courant.
+ * Envoie une requête PUT, met à jour la session et rafraîchit la page.
+ *
+ * @param {number} oid  - L'identifiant de l'objet à activer.
+ * @param {string} type - Le type d'objet ({@code 'badge'} ou {@code 'titre'}).
+ */
 async function activateObjet(oid, type) {
   try {
     const u = await Api.put(`/utilisateurs/${Session.uid()}`, {
@@ -636,6 +695,14 @@ async function activateObjet(oid, type) {
     app.navigate();
   } catch (e) { toast(e.message, 'error'); }
 }
+
+/**
+ * Désactive un objet cosmétique (badge ou titre) pour l'utilisateur courant.
+ * Envoie une requête PUT avec {@code null}, met à jour la session et rafraîchit la page.
+ *
+ * @param {number} oid  - L'identifiant de l'objet à désactiver.
+ * @param {string} type - Le type d'objet ({@code 'badge'} ou {@code 'titre'}).
+ */
 async function deactivateObjet(oid, type) {
   try {
     const u = await Api.put(`/utilisateurs/${Session.uid()}`, {
@@ -647,9 +714,13 @@ async function deactivateObjet(oid, type) {
   } catch (e) { toast(e.message, 'error'); }
 }
 
-// ============================================================================
-// S7 - LEADERBOARD
-// ============================================================================
+/**
+ * Page complète du classement affichant tous les utilisateurs triés par points.
+ * <p>
+ * Affiche un podium pour le top 3 (or, argent, bronze) suivi d'un tableau
+ * de classement complet. La ligne de l'utilisateur courant est mise en surbrillance.
+ * </p>
+ */
 app.register('/leaderboard', async () => {
   const lb = await Api.get('/leaderboard');
   const me = Session.uid();
@@ -704,9 +775,14 @@ app.register('/leaderboard', async () => {
   `;
 });
 
-// ============================================================================
-// S8 - BOUTIQUE
-// ============================================================================
+/**
+ * Page de la boutique cosmétique où les utilisateurs achètent des objets avec leurs points.
+ * <p>
+ * Affiche tous les objets disponibles avec des onglets de filtre par type
+ * (badge, titre, thème, cosmétique). Chaque objet montre son prix et un bouton
+ * contextuel : "Acheter", "Possédé" ou "Fonds insuffisants".
+ * </p>
+ */
 app.register('/boutique', async () => {
   const user = await Api.get(`/utilisateurs/${Session.uid()}`);
   Session.set(user);
@@ -746,6 +822,14 @@ app.register('/boutique', async () => {
   });
 });
 
+/**
+ * Génère la carte d'un objet dans la boutique.
+ *
+ * @param {Object}      o         - L'objet cosmétique.
+ * @param {number}      points    - Les points disponibles de l'utilisateur courant.
+ * @param {Set<number>} ownedOids - Ensemble des identifiants d'objets déjà possédés.
+ * @returns {string} Chaîne HTML de la carte boutique.
+ */
 function renderShopCard(o, points, ownedOids) {
   const owned = ownedOids.has(o.oid);
   const canAfford = points >= o.prix;
@@ -767,6 +851,17 @@ function renderShopCard(o, points, ownedOids) {
   `;
 }
 
+/**
+ * Lance l'achat d'un objet cosmétique après confirmation de l'utilisateur.
+ * <p>
+ * Ouvre une modale de confirmation affichant le solde après achat.
+ * Sur confirmation, envoie la requête d'achat, rafraîchit la session et recharge la page.
+ * </p>
+ *
+ * @param {number} oid  - L'identifiant de l'objet à acheter.
+ * @param {string} nom  - Le nom affiché de l'objet (montré dans la modale).
+ * @param {number} prix - Le prix en points (montré dans la modale).
+ */
 async function buyObjet(oid, nom, prix) {
   modal({
     title: `Acheter "${nom}" pour ${prix} pts ?`,
@@ -784,9 +879,13 @@ async function buyObjet(oid, nom, prix) {
   });
 }
 
-// ============================================================================
-// S9 - INVENTAIRE
-// ============================================================================
+/**
+ * Page d'inventaire listant tous les objets cosmétiques possédés par l'utilisateur courant.
+ * <p>
+ * Chaque objet possédé affiche son nom, type, description, date d'acquisition,
+ * et un bouton d'activation/désactivation pour les badges et titres.
+ * </p>
+ */
 app.register('/inventaire', async () => {
   const user = Session.get();
   const possessions = await Api.get(`/possessions?uid=${user.uid}`);
@@ -821,9 +920,13 @@ app.register('/inventaire', async () => {
   `;
 });
 
-// ============================================================================
-// S10 - HISTORIQUE TRANSACTIONS
-// ============================================================================
+/**
+ * Page d'historique des transactions de l'utilisateur courant.
+ * <p>
+ * Affiche des statistiques résumées (total gagné, total dépensé, solde actuel)
+ * et un tableau détaillé de toutes les transactions de points triées par date.
+ * </p>
+ */
 app.register('/transactions', async () => {
   const user = Session.get();
   const transactions = await Api.get(`/transactions?uid=${user.uid}`);
@@ -864,9 +967,16 @@ app.register('/transactions', async () => {
   `;
 });
 
-// ============================================================================
-// S11 - ANALYTICS (les 8 requetes)
-// ============================================================================
+/**
+ * Tableau de bord analytique exécutant et affichant les 8 requêtes imposées par le projet.
+ * <p>
+ * Récupère les 8 résultats en parallèle depuis les endpoints {@code /analytics/*}
+ * et rend chaque résultat dans une carte dédiée :
+ * Q1 (top 10 par points), Q2 (utilisateurs avec 3+ cours), Q3 (cours le plus populaire),
+ * Q4 (meilleur résumé par cours), Q5 (utilisateurs sans résumé), Q6 (objet le plus acheté),
+ * Q7 (utilisateurs ayant trop dépensé), Q8 (moyenne de résumés par utilisateur).
+ * </p>
+ */
 app.register('/analytics', async () => {
   $('#page').innerHTML = `
     <div class="page-header">
